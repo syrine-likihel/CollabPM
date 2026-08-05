@@ -1,0 +1,128 @@
+.member-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  transition: all 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.member-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.member-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.member-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.member-email {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.role-badge {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.role-admin   { background: var(--primary-light); color: var(--primary); }
+.role-manager { background: var(--success-bg); color: var(--success-text); }
+.role-member  { background: var(--background); color: var(--text-muted); border: 1px solid var(--border); }
+
+.member-stats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.mstat-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.mstat-icon { font-size: 12px; }
+.mstat-num  { font-size: 13px; font-weight: 700; color: var(--text); }
+.mstat-txt  { font-size: 11px; color: var(--text-muted); }
+
+.mstat-divider-v {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+}
+
+.member-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-msg {
+  flex: 1;
+  padding: 7px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-light);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.btn-msg:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-remove {
+  flex: 1;
+  padding: 7px;
+  background: var(--background);
+  color: var(--danger);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.btn-remove:hover {
+  background: var(--danger-bg);
+  border-color: var(--danger);
+}

@@ -1,0 +1,139 @@
+<div class="layout">
+  <app-sidebar />
+  <div class="main">
+    <app-topbar
+      pageTitle="Profile"
+      pageSubtitle="Manage your account settings"
+    />
+
+    <div class="content">
+
+      <!-- Profile Hero -->
+      <div class="profile-hero">
+        <div class="hero-left">
+          <div class="profile-avatar" [style.background]="user.color">
+            {{ user.avatar }}
+          </div>
+          <div class="profile-info">
+            <h2 class="profile-name">{{ user.fullName }}</h2>
+            <div class="profile-email">{{ user.email }}</div>
+            <span class="role-badge" [class]="getRoleClass(user.role)">
+              {{ getRoleLabel(user.role) }}
+            </span>
+            <div class="profile-joined">📅 Member since {{ user.joinedAt }}</div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          @for (stat of stats; track stat.label) {
+            <div class="hero-stat">
+              <div class="hero-stat-icon">{{ stat.icon }}</div>
+              <div class="hero-stat-value">{{ stat.value }}</div>
+              <div class="hero-stat-label">{{ stat.label }}</div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Tabs + Content -->
+      <div class="profile-body">
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <button class="tab-btn" [class.active]="activeTab === 'personal'" (click)="activeTab = 'personal'">
+            👤 Personal Info
+          </button>
+          <button class="tab-btn" [class.active]="activeTab === 'password'" (click)="activeTab = 'password'">
+            🔒 Password
+          </button>
+          <button class="tab-btn" [class.active]="activeTab === 'activity'" (click)="activeTab = 'activity'">
+            📋 Activity
+          </button>
+        </div>
+
+        <!-- Personal Info Tab -->
+        @if (activeTab === 'personal') {
+          <div class="tab-content">
+            <div class="form-section">
+              <h3 class="section-title">Personal Information</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Full name</label>
+                  <input type="text" [(ngModel)]="editForm.fullName" placeholder="Full name" />
+                </div>
+                <div class="form-group">
+                  <label>Email address</label>
+                  <input type="email" [(ngModel)]="editForm.email" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                  <label>Role</label>
+                  <select [(ngModel)]="editForm.role">
+                    <option value="ADMIN">Admin</option>
+                    <option value="PROJECT_MANAGER">Project Manager</option>
+                    <option value="MEMBER">Member</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Member since</label>
+                  <input type="text" [value]="user.joinedAt" disabled />
+                </div>
+              </div>
+              <button class="btn-save" (click)="saveProfile()">
+                💾 Save changes
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Password Tab -->
+        @if (activeTab === 'password') {
+          <div class="tab-content">
+            <div class="form-section">
+              <h3 class="section-title">Change Password</h3>
+              <div class="form-col">
+                <div class="form-group">
+                  <label>Current password</label>
+                  <input type="password" [(ngModel)]="passwordForm.currentPassword" placeholder="Enter current password" />
+                </div>
+                <div class="form-group">
+                  <label>New password</label>
+                  <input type="password" [(ngModel)]="passwordForm.newPassword" placeholder="Enter new password (min. 6 chars)" />
+                </div>
+                <div class="form-group">
+                  <label>Confirm new password</label>
+                  <input type="password" [(ngModel)]="passwordForm.confirmPassword" placeholder="Repeat new password" />
+                </div>
+              </div>
+              <button class="btn-save" (click)="changePassword()">
+                🔒 Change password
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- Activity Tab -->
+        @if (activeTab === 'activity') {
+          <div class="tab-content">
+            <div class="form-section">
+              <h3 class="section-title">Recent Activity</h3>
+              <div class="activity-list">
+                @for (item of recentActivity; track item.time) {
+                  <div class="activity-row">
+                    <div class="activity-icon">{{ item.icon }}</div>
+                    <div class="activity-info">
+                      <div class="activity-action">
+                        {{ item.action }}
+                        <span class="activity-target">{{ item.target }}</span>
+                      </div>
+                      <div class="activity-time">{{ item.time }}</div>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

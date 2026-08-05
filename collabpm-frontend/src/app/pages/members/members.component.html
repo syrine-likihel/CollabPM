@@ -1,0 +1,80 @@
+<div class="layout">
+  <app-sidebar />
+  <div class="main">
+    <app-topbar
+      pageTitle="Members"
+      pageSubtitle="Manage your team members"
+      buttonLabel="Invite Member"
+      buttonLink=""
+    />
+
+    <div class="content">
+
+      <div class="member-stats">
+        <div class="mstat">
+          <div class="mstat-value">{{ counts.all }}</div>
+          <div class="mstat-label">Total members</div>
+        </div>
+        <div class="mstat-divider"></div>
+        <div class="mstat">
+          <div class="mstat-value" style="color:var(--primary)">{{ counts.admins }}</div>
+          <div class="mstat-label">Admins</div>
+        </div>
+        <div class="mstat-divider"></div>
+        <div class="mstat">
+          <div class="mstat-value" style="color:var(--success)">{{ counts.managers }}</div>
+          <div class="mstat-label">Managers</div>
+        </div>
+        <div class="mstat-divider"></div>
+        <div class="mstat">
+          <div class="mstat-value" style="color:var(--warning)">{{ counts.members }}</div>
+          <div class="mstat-label">Members</div>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <div class="role-filters">
+          <button class="filter-btn" [class.active]="roleFilter === 'ALL'" (click)="roleFilter = 'ALL'">
+            All <span class="count">{{ counts.all }}</span>
+          </button>
+          <button class="filter-btn" [class.active]="roleFilter === 'ADMIN'" (click)="roleFilter = 'ADMIN'">
+            Admins <span class="count">{{ counts.admins }}</span>
+          </button>
+          <button class="filter-btn" [class.active]="roleFilter === 'PROJECT_MANAGER'" (click)="roleFilter = 'PROJECT_MANAGER'">
+            Managers <span class="count">{{ counts.managers }}</span>
+          </button>
+          <button class="filter-btn" [class.active]="roleFilter === 'MEMBER'" (click)="roleFilter = 'MEMBER'">
+            Members <span class="count">{{ counts.members }}</span>
+          </button>
+        </div>
+        <div class="search-wrap">
+          <span>🔍</span>
+          <input
+            type="text"
+            [(ngModel)]="searchText"
+            placeholder="Search members..."
+            class="search-input"
+          />
+        </div>
+      </div>
+
+      <div class="members-grid">
+        @for (member of filtered; track member.id) {
+          <app-member-card
+            [member]="member"
+            (onRemove)="onRemove($event)"
+          />
+        }
+      </div>
+
+      @if (filtered.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">👥</div>
+          <div class="empty-title">No members found</div>
+          <div class="empty-sub">Try changing the search or filter</div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

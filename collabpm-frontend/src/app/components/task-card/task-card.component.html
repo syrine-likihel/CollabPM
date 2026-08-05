@@ -1,0 +1,53 @@
+<tr class="task-row" [class.overdue-row]="task.overdue">
+
+  <td>
+    <div class="task-title" [class.done-title]="task.status === 'DONE'">
+      {{ task.title }}
+    </div>
+    <div class="task-desc">{{ task.description }}</div>
+  </td>
+
+  <td>
+    <span class="project-tag">{{ task.project }}</span>
+  </td>
+
+  <td>
+    <div class="priority-cell">
+      <span class="prio-dot" [class]="getPriorityClass(task.priority)"></span>
+      {{ task.priority }}
+    </div>
+  </td>
+
+  <td>
+    <select
+      class="status-select"
+      [value]="task.status"
+      (change)="changeStatus($event)"
+      [class]="getStatusClass(task.status)">
+      <option value="TODO">To do</option>
+      <option value="IN_PROGRESS">In progress</option>
+      <option value="DONE">Done</option>
+    </select>
+  </td>
+
+  <td>
+    <span [class.overdue-date]="task.overdue">
+      {{ task.overdue ? '⚠ ' : '' }}{{ task.due }}
+    </span>
+  </td>
+
+  <td>
+    <div class="assignee-cell">
+      <div class="assignee-av">{{ task.assignee }}</div>
+      <span class="assignee-name">{{ task.assigneeName }}</span>
+    </div>
+  </td>
+
+  <td>
+    <div class="action-btns">
+      <a [routerLink]="['/tasks/edit', task.id]" class="btn-icon" title="Edit">✏️</a>
+      <button class="btn-icon btn-del" (click)="delete()" title="Delete">🗑️</button>
+    </div>
+  </td>
+
+</tr>

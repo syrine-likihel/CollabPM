@@ -1,0 +1,76 @@
+<div class="layout">
+  <app-sidebar />
+  <div class="main">
+    <app-topbar
+      pageTitle="Dashboard"
+      pageSubtitle="Welcome back, Ahmed 👋"
+      buttonLabel="New Project"
+      buttonLink="/projects/new"
+    />
+
+    <div class="content">
+
+      <!-- Stats using StatCard component -->
+      <div class="stats-grid">
+        @for (stat of stats; track stat.label) {
+          <app-stat-card
+            [label]="stat.label"
+            [value]="stat.value"
+            [icon]="stat.icon"
+            [color]="stat.color"
+            [change]="stat.change"
+          />
+        }
+      </div>
+
+      <div class="dashboard-grid">
+
+        <!-- Projects using ProjectCard component -->
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Recent Projects</h3>
+            <a routerLink="/projects" class="see-all">See all →</a>
+          </div>
+          <div class="projects-list">
+            @for (project of projects; track project.id) {
+              <app-project-card
+                [project]="project"
+                (onDelete)="onDelete($event)"
+                (onEdit)="onEdit($event)"
+              />
+            }
+          </div>
+        </div>
+
+        <!-- Recent Tasks -->
+        <div class="section">
+          <div class="section-header">
+            <h3 class="section-title">Recent Tasks</h3>
+            <a routerLink="/tasks" class="see-all">See all →</a>
+          </div>
+          <div class="tasks-list">
+            @for (task of recentTasks; track task.title) {
+              <div class="task-row">
+                <div class="task-info">
+                  <div class="task-title">{{ task.title }}</div>
+                  <div class="task-meta">
+                    <span class="task-project">{{ task.project }}</span>
+                    <span class="task-due">📅 {{ task.due }}</span>
+                  </div>
+                </div>
+                <div class="task-right">
+                  <span class="prio-dot" [class]="getPriorityClass(task.priority)"></span>
+                  <span class="badge" [class]="getTaskStatusClass(task.status)">
+                    {{ getTaskStatusLabel(task.status) }}
+                  </span>
+                  <div class="task-avatar">{{ task.assignee }}</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

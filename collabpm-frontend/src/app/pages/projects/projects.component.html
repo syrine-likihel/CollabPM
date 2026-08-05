@@ -1,0 +1,51 @@
+<div class="layout">
+  <app-sidebar />
+  <div class="main">
+    <app-topbar
+      pageTitle="Projects"
+      pageSubtitle="Manage and track all your projects"
+      buttonLabel="New Project"
+      buttonLink="/projects/new"
+    />
+
+    <div class="content">
+
+      <div class="filters">
+        <button class="filter-btn" [class.active]="filter === 'ALL'" (click)="filter = 'ALL'">
+          All <span class="count">{{ counts.all }}</span>
+        </button>
+        <button class="filter-btn" [class.active]="filter === 'IN_PROGRESS'" (click)="filter = 'IN_PROGRESS'">
+          In Progress <span class="count">{{ counts.inProgress }}</span>
+        </button>
+        <button class="filter-btn" [class.active]="filter === 'PLANNED'" (click)="filter = 'PLANNED'">
+          Planned <span class="count">{{ counts.planned }}</span>
+        </button>
+        <button class="filter-btn" [class.active]="filter === 'COMPLETED'" (click)="filter = 'COMPLETED'">
+          Completed <span class="count">{{ counts.completed }}</span>
+        </button>
+        <button class="filter-btn filter-late" [class.active]="filter === 'LATE'" (click)="filter = 'LATE'">
+          Late <span class="count">{{ counts.late }}</span>
+        </button>
+      </div>
+
+      <div class="projects-grid">
+        @for (project of filteredProjects; track project.id) {
+          <app-project-card
+            [project]="project"
+            (onDelete)="onDelete($event)"
+            (onEdit)="onEdit($event)"
+          />
+        }
+      </div>
+
+      @if (filteredProjects.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">📁</div>
+          <div class="empty-title">No projects found</div>
+          <div class="empty-sub">Try changing the filter or create a new project</div>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

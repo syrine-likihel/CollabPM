@@ -1,0 +1,21 @@
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="page-title">{{ pageTitle }}</div>
+    @if (pageSubtitle) {
+      <div class="page-subtitle">{{ pageSubtitle }}</div>
+    }
+  </div>
+  <div class="topbar-right">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search..." />
+    </div>
+    <div class="topbar-notif">🔔</div>
+    <div class="topbar-avatar">AT</div>
+    @if (buttonLabel && buttonLink) {
+      <a [routerLink]="buttonLink" class="btn-action">
+        + {{ buttonLabel }}
+      </a>
+    }
+  </div>
+</div>

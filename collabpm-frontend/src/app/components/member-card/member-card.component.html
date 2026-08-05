@@ -1,0 +1,40 @@
+<div class="member-card">
+
+  <div class="member-card-top">
+    <div class="member-avatar" [style.background]="member.color">
+      {{ member.avatar }}
+    </div>
+    <div class="member-info">
+      <div class="member-name">{{ member.fullName }}</div>
+      <div class="member-email">{{ member.email }}</div>
+      <span class="role-badge" [class]="getRoleClass(member.role)">
+        {{ getRoleLabel(member.role) }}
+      </span>
+    </div>
+  </div>
+
+  <div class="member-stats-row">
+    <div class="mstat-item">
+      <span class="mstat-icon">📁</span>
+      <span class="mstat-num">{{ member.projects }}</span>
+      <span class="mstat-txt">Projects</span>
+    </div>
+    <div class="mstat-divider-v"></div>
+    <div class="mstat-item">
+      <span class="mstat-icon">✅</span>
+      <span class="mstat-num">{{ member.tasks }}</span>
+      <span class="mstat-txt">Tasks</span>
+    </div>
+    <div class="mstat-divider-v"></div>
+    <div class="mstat-item">
+      <span class="mstat-icon">📅</span>
+      <span class="mstat-txt">{{ member.joinedAt }}</span>
+    </div>
+  </div>
+
+  <div class="member-actions">
+    <button class="btn-msg">✉ Message</button>
+    <button class="btn-remove" (click)="remove()">Remove</button>
+  </div>
+
+</div>

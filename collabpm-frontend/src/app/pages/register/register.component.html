@@ -1,0 +1,158 @@
+<div class="register-page">
+
+  <!-- Left side -->
+  <div class="register-left">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <rect width="24" height="24" rx="6" fill="white" fill-opacity="0.15"/>
+          <path d="M6 8h12M6 12h8M6 16h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="brand-name">CollabPM</span>
+    </div>
+
+    <div class="left-content">
+      <h1>Start managing<br/><span>your projects.</span></h1>
+      <p>Join thousands of teams using CollabPM to deliver projects on time.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">01</div>
+          <div class="step-info">
+            <div class="step-title">Create your account</div>
+            <div class="step-desc">Fill in your details to get started</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-number">02</div>
+          <div class="step-info">
+            <div class="step-title">Create a project</div>
+            <div class="step-desc">Set up your first project in seconds</div>
+          </div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-number">03</div>
+          <div class="step-info">
+            <div class="step-title">Invite your team</div>
+            <div class="step-desc">Collaborate and track progress together</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">
+      <span>ISLAI Beja · 2026–2027</span>
+    </div>
+  </div>
+
+  <!-- Right side -->
+  <div class="register-right">
+    <div class="register-card">
+
+      <div class="card-header">
+        <h2>Create account</h2>
+        <p>Fill in the details below to get started</p>
+      </div>
+
+      @if (error) {
+        <div class="error-alert">
+          <span>⚠</span> {{ error }}
+        </div>
+      }
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+
+        <div class="form-group">
+          <label for="fullName">Full name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input
+              id="fullName"
+              type="text"
+              [(ngModel)]="fullName"
+              name="fullName"
+              placeholder="Your name"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✉</span>
+            <input
+              id="email"
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="you@example.com"
+            />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="role">Role</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🎯</span>
+            <select id="role" [(ngModel)]="role" name="role">
+              <option value="ADMIN">Admin</option>
+              <option value="PROJECT_MANAGER">Project Manager</option>
+              <option value="MEMBER">Member</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input
+                id="password"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="password"
+                name="password"
+                placeholder="Min. 6 characters"
+              />
+              <button type="button" class="toggle-pw" (click)="showPassword = !showPassword">
+                {{ showPassword ? '🙈' : '👁' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input
+                id="confirmPassword"
+                [type]="showPassword ? 'text' : 'password'"
+                [(ngModel)]="confirmPassword"
+                name="confirmPassword"
+                placeholder="Repeat password"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-register" [disabled]="loading">
+          @if (!loading) { <span>Create account →</span> }
+          @if (loading) { <span class="spinner"></span> }
+        </button>
+
+      </form>
+
+      <div class="divider"><span>or</span></div>
+
+      <p class="login-link">
+        Already have an account?
+        <a routerLink="/login">Sign in</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
