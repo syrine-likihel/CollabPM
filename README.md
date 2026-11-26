@@ -1,138 +1,165 @@
-# 🚀 CollabPM
+# CollabPM – Plateforme collaborative de gestion de projets
 
-A Full Stack collaborative project management platform developed using **Spring Boot** and **Angular**.
+## Présentation
 
-CollabPM helps teams efficiently manage projects, tasks, members, and collaboration through a modern web application with a clean architecture and RESTful APIs.
+**CollabPM** est une application web collaborative conçue pour faciliter la gestion des projets, l'organisation des tâches et le suivi de leur avancement au sein d'une équipe.
 
-> **Status:** 🚧 Currently under development (Academic Project)
+La plateforme permet aux utilisateurs de collaborer efficacement grâce à une interface intuitive, un système de gestion des rôles et une authentification sécurisée.
 
----
+Le projet est développé avec **Angular** pour le Frontend et **Spring Boot** pour le Backend, avec une base de données **MySQL**.
 
-## 📌 Features
+## Fonctionnalités principales
 
-### 👤 User Management
-- User authentication *(In Progress)*
-- User role management
-- Profile management
+### Authentification et gestion des utilisateurs
+- Inscription et connexion des utilisateurs.
+- Authentification sécurisée avec JWT.
+- Gestion des comptes utilisateurs.
+- Attribution et gestion des rôles.
 
-### 📁 Project Management
-- Create, update, delete and view projects
-- Project details
-- Project status management
+### Gestion des projets
+- Création, consultation, modification et suppression des projets selon les permissions.
+- Consultation des détails d'un projet.
+- Gestion des membres associés aux projets.
 
-### ✅ Task Management
-- CRUD operations for tasks
-- Task assignment
-- Task priorities
-- Task status updates
-- Due dates
+### Gestion des tâches
+- Création et modification des tâches.
+- Affectation des tâches aux membres.
+- Suivi de l'état d'avancement.
+- Organisation des tâches sous forme de tableau Kanban.
 
-### 👥 Team Management
-- Add members to projects
-- Assign tasks to members
-- Team collaboration
+### Collaboration
+- Ajout et consultation des commentaires.
+- Suivi des activités liées aux tâches.
+- Collaboration entre les membres d'une équipe.
 
-### 💬 Comments
-- Add comments to tasks
-- View task discussions
+### Tableau de bord
+- Visualisation des statistiques.
+- Suivi global des projets et des tâches.
+- Consultation des informations importantes depuis une interface centralisée.
 
-### 📊 Dashboard
-- Project statistics
-- Task statistics
-- Progress overview
+## Gestion des rôles et permissions
 
-### 📋 Kanban Board
-- Drag & Drop task workflow
-- Status management
-- Task organization
+La plateforme propose trois rôles principaux :
 
-### 🔧 Backend Features
-- RESTful APIs
-- Layered Architecture
-- DTO Pattern
-- Mapper Pattern
-- Validation
-- Exception Handling
-- Spring Data JPA
-- Hibernate ORM
+| Rôle | Permissions |
+|---|---|
+| **ADMIN** | Gestion complète des utilisateurs, projets et tâches. |
+| **PROJECT_MANAGER** | Consultation des projets et gestion des tâches dans les projets auxquels il appartient, selon ses permissions. |
+| **MEMBER** | Consultation des projets et des tâches, ajout de commentaires et modification du statut des tâches qui lui sont affectées. |
 
-### 🧪 API Testing
-- Postman Collection
+## Technologies utilisées
 
----
-
-# 🛠️ Tech Stack
-
-## Backend
-
-- Java
-- Spring Boot
-- Spring Data JPA
-- Hibernate
-- Maven
-- REST API
-
-## Frontend
-
+### Frontend
 - Angular
 - TypeScript
 - HTML5
 - CSS3
 
-## Database
+### Backend
+- Java
+- Spring Boot
+- Spring Security
+- JWT (JSON Web Token)
+- Maven
 
+### Base de données
 - MySQL
 
-## Tools
-
+### Outils de développement
+- IntelliJ IDEA
+- Postman
 - Git
 - GitHub
-- Postman
-- IntelliJ IDEA
-- VS Code
 
----
+## Architecture du projet
 
-# 📂 Project Structure
+Le projet est organisé en deux parties principales :
 
-```
-CollabPM
+```text
+CollabPM/
 │
-├── CollabPM backend
-│   ├── src
-│   ├── pom.xml
-│   └── ...
+├── CollabPM backend/
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/
+│   │       │   └── .../
+│   │       │       ├── api/
+│   │       │       │   ├── controller/
+│   │       │       │   ├── dto/
+│   │       │       │   ├── mapper/
+│   │       │       │   └── exception/
+│   │       │       ├── application/
+│   │       │       │   ├── service/
+│   │       │       │   └── interface/
+│   │       │       ├── domain/
+│   │       │       │   ├── entity/
+│   │       │       │   └── enum/
+│   │       │       ├── repository/
+│   │       │       └── security/
+│   │       └── resources/
+│   └── pom.xml
 │
-├── collabpm-frontend
-│   ├── src
-│   ├── package.json
-│   └── ...
+├── collabpm-frontend/
+│   ├── src/
+│   │   └── app/
+│   │       ├── components/
+│   │       ├── guards/
+│   │       ├── interceptors/
+│   │       ├── pages/
+│   │       └── services/
+│   ├── angular.json
+│   └── package.json
 │
 └── README.md
 ```
 
----
+## Installation et exécution
 
-# ⚙️ Installation
+### Prérequis
 
-## Clone the repository
+Avant de lancer le projet, il faut installer :
+
+- JDK 25
+- Maven
+- Node.js et npm
+- Angular CLI
+- MySQL
+
+### 1. Cloner le repository
 
 ```bash
 git clone https://github.com/syrine-likihel/CollabPM.git
+cd CollabPM
 ```
 
----
+### 2. Configurer la base de données
 
-## Backend
+Créer une base de données MySQL :
+
+```sql
+CREATE DATABASE collabpm_db;
+```
+
+Configurer ensuite les paramètres de connexion à la base de données dans le fichier `application.properties` du Backend.
+
+Ne pas publier ce fichier s'il contient des informations sensibles.
+
+### 3. Lancer le Backend
+
+Ouvrir un terminal dans le dossier Backend :
 
 ```bash
 cd "CollabPM backend"
 mvn spring-boot:run
 ```
 
----
+Le Backend sera accessible à l'adresse :
 
-## Frontend
+`http://localhost:8080`
+
+### 4. Lancer le Frontend
+
+Ouvrir un deuxième terminal :
 
 ```bash
 cd collabpm-frontend
@@ -140,61 +167,37 @@ npm install
 ng serve
 ```
 
-Open your browser:
+Le Frontend sera accessible à l'adresse :
 
-```
-http://localhost:4200
-```
+`http://localhost:4200`
 
----
+## Sécurité
 
-# 📸 Screenshots
+La sécurité de l'application repose notamment sur :
 
-> Screenshots will be added after the UI is completed.
+- Spring Security pour la sécurisation des endpoints.
+- JWT pour l'authentification.
+- La gestion des rôles et des autorisations.
+- Le contrôle d'accès aux fonctionnalités selon les permissions des utilisateurs.
 
-- Login
-- Dashboard
-- Kanban Board
-- Project Management
-- Task Management
+## Tests
 
----
+Les API Backend ont été testées avec **Postman**, notamment pour vérifier :
 
-# 🚧 Roadmap
+- L'authentification.
+- Les opérations CRUD.
+- La gestion des utilisateurs.
+- La gestion des projets et des tâches.
+- Les réponses en cas d'erreurs et d'accès non autorisé.
 
-- [x] Project CRUD
-- [x] Task CRUD
-- [x] Member Management
-- [x] Comment Management
-- [x] Dashboard
-- [x] Kanban Board
-- [x] DTO & Mapper
-- [x] Validation
-- [x] Exception Handling
-- [x] API Testing with Postman
-- [ ] Spring Security
-- [ ] JWT Authentication
-- [ ] Email Notifications
-- [ ] File Attachments
-- [ ] Deployment
+## Auteur
+
+**Likihel Syrine**
+
+Étudiante en 3ème année Licence en Sciences de l'Informatique  
+Spécialité : Génie Logiciel et Système d'Information  
+ISLAI Béja
 
 ---
 
-# 🎓 Academic Project
-
-This project is being developed as part of my **Bachelor's Degree in Software Engineering and Information Systems** at the **Higher Institute of Applied Languages and Computer Science of Béja (ISLAIB), University of Jendouba**.
-
----
-
-# 👩‍💻 Author
-
-**Syrine Likihel**
-
-📍 Tunis, Tunisia
-
-📧 likihelserine@gmail.com
-
-🔗 LinkedIn : https://www.linkedin.com/in/likihel-syrine
-
-💻 GitHub: https://github.com/syrine-likihel
-
+*CollabPM – Simplifier la collaboration, organiser les projets et suivre les tâches efficacement.*
