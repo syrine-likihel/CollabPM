@@ -152,7 +152,7 @@
   color: var(--text-secondary);
 }
 
-/* Error */
+
 .error-alert {
   background: var(--danger-bg);
   color: var(--danger-text);
@@ -166,7 +166,6 @@
   gap: 8px;
 }
 
-/* Form */
 .form-group {
   margin-bottom: 20px;
 }
@@ -245,7 +244,7 @@
   line-height: 1;
 }
 
-/* Button */
+
 .btn-login {
   width: 100%;
   padding: 12px;
@@ -275,7 +274,7 @@
   cursor: not-allowed;
 }
 
-/* Spinner */
+
 .spinner {
   width: 18px;
   height: 18px;
@@ -290,7 +289,7 @@
   to { transform: rotate(360deg); }
 }
 
-/* Divider */
+
 .divider {
   display: flex;
   align-items: center;
@@ -308,7 +307,6 @@
   background: var(--border);
 }
 
-/* Register link */
 .register-link {
   text-align: center;
   font-size: 13px;
@@ -322,7 +320,7 @@
 
 .register-link a:hover { text-decoration: underline; }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .login-page { flex-direction: column; }
   .login-left { width: 100%; padding: 32px 24px; min-height: auto; }
@@ -330,3 +328,27 @@
   .left-content h1 { font-size: 26px; }
   .login-right { padding: 32px 24px; }
 }
+.has-error .input-wrapper input {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.08);
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--danger);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-error::before { content: '⚠'; font-size: 10px; }
+
+.input-error-icon {
+  position: absolute;
+  right: 38px;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.required { color: var(--danger); margin-left: 2px; }

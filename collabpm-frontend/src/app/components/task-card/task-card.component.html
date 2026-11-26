@@ -1,53 +1,140 @@
-<tr class="task-row" [class.overdue-row]="task.overdue">
+<td>
+  <div
+    class="task-title"
+    [class.done-title]="task.status === 'DONE'"
+  >
+    {{ task.title }}
+  </div>
 
-  <td>
-    <div class="task-title" [class.done-title]="task.status === 'DONE'">
-      {{ task.title }}
-    </div>
-    <div class="task-desc">{{ task.description }}</div>
-  </td>
+  <div class="task-desc">
+    {{ task.description || 'No description' }}
+  </div>
+</td>
+<td>
+  <span class="project-tag">
+    {{ task.projectName || 'No project' }}
+  </span>
+</td>
+<td>
+  <div class="priority-cell">
 
-  <td>
-    <span class="project-tag">{{ task.project }}</span>
-  </td>
+    <span
+      class="prio-dot"
+      [class]="getPriorityClass(task.priority)"
+    ></span>
 
-  <td>
-    <div class="priority-cell">
-      <span class="prio-dot" [class]="getPriorityClass(task.priority)"></span>
+    <span>
       {{ task.priority }}
-    </div>
-  </td>
+    </span>
 
-  <td>
+  </div>
+</td>
+<td>
+
+  @if (canChangeStatus) {
+
     <select
       class="status-select"
       [value]="task.status"
       (change)="changeStatus($event)"
-      [class]="getStatusClass(task.status)">
-      <option value="TODO">To do</option>
-      <option value="IN_PROGRESS">In progress</option>
-      <option value="DONE">Done</option>
+      [class]="getStatusClass(task.status)"
+    >
+
+      <option value="TO_DO">
+        To do
+      </option>
+
+      <option value="IN_PROGRESS">
+        In progress
+      </option>
+
+      <option value="DONE">
+        Done
+      </option>
+
     </select>
-  </td>
 
-  <td>
-    <span [class.overdue-date]="task.overdue">
-      {{ task.overdue ? '⚠ ' : '' }}{{ task.due }}
+  } @else {
+
+    <span
+      class="status-select"
+      [class]="getStatusClass(task.status)"
+    >
+      {{ getStatusLabel(task.status) }}
     </span>
-  </td>
 
-  <td>
-    <div class="assignee-cell">
-      <div class="assignee-av">{{ task.assignee }}</div>
-      <span class="assignee-name">{{ task.assigneeName }}</span>
+  }
+
+</td>
+<td>
+
+  <span [class.overdue-date]="task.overdue">
+
+    @if (task.overdue) {
+      ⚠
+    }
+
+    {{ task.dueDate }}
+
+  </span>
+
+</td>
+<td>
+
+  <div class="assignee-cell">
+
+    <div class="assignee-av">
+      {{
+        task.assignedToName
+          ? task.assignedToName
+              .substring(0, 2)
+              .toUpperCase()
+          : 'UN'
+      }}
     </div>
-  </td>
 
-  <td>
-    <div class="action-btns">
-      <a [routerLink]="['/tasks/edit', task.id]" class="btn-icon" title="Edit">✏️</a>
-      <button class="btn-icon btn-del" (click)="delete()" title="Delete">🗑️</button>
-    </div>
-  </td>
+    <span class="assignee-name">
+      {{ task.assignedToName || 'Unassigned' }}
+    </span>
 
-</tr>
+  </div>
+
+</td>
+<td>
+
+  <div class="action-btns">
+    <a
+      [routerLink]="['/comments', task.id]"
+      class="btn-icon"
+      title="Comments"
+    >
+      💬
+    </a>
+    @if (canEdit) {
+
+      <a
+        [routerLink]="['/tasks/edit', task.id]"
+        class="btn-icon"
+        title="Edit"
+      >
+        ✏️
+      </a>
+
+    }
+
+    @if (canDelete) {
+
+      <button
+        type="button"
+        class="btn-icon btn-del"
+        (click)="delete()"
+        title="Delete"
+      >
+        🗑️
+      </button>
+
+    }
+
+  </div>
+
+</td>

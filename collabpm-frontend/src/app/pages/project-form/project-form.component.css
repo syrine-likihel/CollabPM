@@ -21,7 +21,6 @@
   margin: 0 auto;
 }
 
-/* Header */
 .form-header {
   display: flex;
   align-items: center;
@@ -78,7 +77,6 @@
   background: var(--primary-light);
 }
 
-/* Error */
 .error-alert {
   background: var(--danger-bg);
   color: var(--danger-text);
@@ -89,7 +87,6 @@
   margin-bottom: 20px;
 }
 
-/* Form body */
 .form-body {
   display: flex;
   flex-direction: column;
@@ -115,7 +112,6 @@
   letter-spacing: 0.05em;
 }
 
-/* Form groups */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -168,7 +164,6 @@
   color: var(--text-muted);
 }
 
-/* Grids */
 .form-grid-full {
   display: flex;
   flex-direction: column;
@@ -180,7 +175,6 @@
   gap: 14px;
 }
 
-/* Actions */
 .form-actions {
   display: flex;
   justify-content: flex-end;

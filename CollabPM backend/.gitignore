@@ -31,3 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
+CollabPM backend/src/main/resources/application.properties

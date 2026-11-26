@@ -1,21 +1,144 @@
 <div class="topbar">
+
   <div class="topbar-left">
-    <div class="page-title">{{ pageTitle }}</div>
-    @if (pageSubtitle) {
-      <div class="page-subtitle">{{ pageSubtitle }}</div>
-    }
-  </div>
-  <div class="topbar-right">
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input type="text" placeholder="Search..." />
+
+    <div class="page-title">
+      {{ pageTitle }}
     </div>
-    <div class="topbar-notif">🔔</div>
-    <div class="topbar-avatar">AT</div>
+
+    @if (pageSubtitle) {
+      <div class="page-subtitle">
+        {{ pageSubtitle }}
+      </div>
+    }
+
+  </div>
+
+
+  <div class="topbar-right">
+
+    <!-- SEARCH -->
+    <div class="search-container">
+
+      <div class="search-box">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+          type="text"
+          placeholder="Search projects, tasks..."
+          [value]="searchText"
+          (input)="onSearch($event)"
+        />
+
+        @if (searchText) {
+          <button
+            type="button"
+            class="search-clear"
+            (click)="clearSearch()"
+          >
+            ×
+          </button>
+        }
+
+      </div>
+
+
+      <!-- SEARCH RESULTS -->
+      @if (searchText) {
+
+        <div class="search-results">
+
+          @if (searchResults.length > 0) {
+
+            @for (result of searchResults; track result.type + '-' + result.id) {
+
+              <button
+                type="button"
+                class="search-result"
+                (click)="openResult(result)"
+              >
+
+                <div class="result-icon">
+
+                  @if (result.type === 'project') {
+                    📁
+                  }
+
+                  @if (result.type === 'task') {
+                    ✓
+                  }
+
+                </div>
+
+                <div class="result-content">
+
+                  <div class="result-type">
+                    {{ result.type === 'project' ? 'PROJECT' : 'TASK' }}
+                  </div>
+
+                  <div class="result-title">
+                    {{ result.title }}
+                  </div>
+
+                  <div class="result-subtitle">
+                    {{ result.subtitle }}
+                  </div>
+
+                </div>
+
+              </button>
+
+            }
+
+          } @else {
+
+            <div class="no-results">
+
+              <div class="no-results-icon">
+                🔍
+              </div>
+
+              <div class="no-results-title">
+                No results found
+              </div>
+
+              <div class="no-results-sub">
+                Try another search term
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+
+    <!-- NOTIFICATION -->
+    <div class="topbar-notif">
+      🔔
+    </div>
+
+    <div class="topbar-avatar">
+      {{ pageTitle ? pageTitle[0] : 'U' }}
+    </div>
+
+
     @if (buttonLabel && buttonLink) {
-      <a [routerLink]="buttonLink" class="btn-action">
+
+      <a
+        [routerLink]="buttonLink"
+        class="btn-action"
+      >
         + {{ buttonLabel }}
       </a>
+
     }
+
   </div>
+
 </div>

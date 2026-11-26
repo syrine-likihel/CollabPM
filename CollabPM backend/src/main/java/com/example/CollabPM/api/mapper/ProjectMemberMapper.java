@@ -9,6 +9,7 @@ public class ProjectMemberMapper {
     public ProjectMemberResponse toResponse(ProjectMember member) {
         ProjectMemberResponse response = new ProjectMemberResponse();
         response.setId(member.getId());
+        response.setUserId(member.getUser().getId());
         response.setProjectName(member.getProject().getName());
         response.setUserName(member.getUser().getFullName());
         response.setUserEmail(member.getUser().getEmail());

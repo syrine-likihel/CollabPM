@@ -6,7 +6,7 @@ import com.example.CollabPM.domain.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component
-    public class UserMapper {
+public class UserMapper {
 
     public User toEntity(UserDto dto) {
         return User.builder()
@@ -18,19 +18,28 @@ import org.springframework.stereotype.Component;
     }
 
     public void updateEntity(User user, UserDto dto) {
+
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
-        if (dto.getPassword() != null) user.setPassword(dto.getPassword());
-        user.setRole(dto.getRole());
+
+        if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+            user.setPassword(dto.getPassword());
+        }
+
+        if (dto.getRole() != null) {
+            user.setRole(dto.getRole());
+        }
     }
 
     public UserResponse toResponse(User user) {
         UserResponse response = new UserResponse();
+
         response.setId(user.getId());
         response.setFullName(user.getFullName());
         response.setEmail(user.getEmail());
         response.setRole(user.getRole());
         response.setCreatedAt(user.getCreatedAt());
+
         return response;
     }
 }

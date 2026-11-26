@@ -13,9 +13,9 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findByOwner(User owner);
 
-    @Query("SELECT p FROM Project p JOIN FETCH p.owner WHERE p.id = :id")
-    Optional<Project> findByIdWithOwner(Long id);
-
-    @Query("SELECT p FROM Project p JOIN FETCH p.owner")
+    @Query("SELECT DISTINCT p FROM Project p JOIN FETCH p.owner LEFT JOIN FETCH p.tasks")
     List<Project> findAllWithOwner();
+
+    @Query("SELECT DISTINCT p FROM Project p JOIN FETCH p.owner LEFT JOIN FETCH p.tasks WHERE p.id = :id")
+    Optional<Project> findByIdWithOwner(Long id);
 }

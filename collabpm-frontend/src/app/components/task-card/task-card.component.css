@@ -1,5 +1,5 @@
 .task-row {
-  transition: background 0.1s;
+  transition: background 0.12s ease;
 }
 
 .task-row:hover td {
@@ -7,14 +7,20 @@
 }
 
 .overdue-row td {
-  background: rgba(239,68,68,0.02);
+  background: rgba(239, 68, 68, 0.025);
 }
+
 
 .task-title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
-  margin-bottom: 3px;
+
+  margin-bottom: 4px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .done-title {
@@ -23,110 +29,187 @@
 }
 
 .task-desc {
+  max-width: 100%;
+
   font-size: 11px;
   color: var(--text-muted);
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .project-tag {
-  font-size: 11px;
-  color: var(--primary);
+  display: inline-block;
+
+  max-width: 100%;
+
+  padding: 4px 8px;
+
+  border-radius: 5px;
+
   background: var(--primary-light);
-  padding: 3px 8px;
-  border-radius: 4px;
+  color: var(--primary);
+
+  font-size: 11px;
   font-weight: 500;
+
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  vertical-align: middle;
 }
 
 .priority-cell {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+
   font-size: 12px;
-  color: var(--text-secondary);
   font-weight: 500;
+
+  color: var(--text-secondary);
+
+  white-space: nowrap;
 }
 
 .prio-dot {
   width: 8px;
   height: 8px;
+
   border-radius: 50%;
+
   flex-shrink: 0;
 }
 
-.prio-high   { background: var(--danger); }
-.prio-medium { background: var(--warning); }
-.prio-low    { background: var(--success); }
-
-.status-select {
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
+.prio-high {
+  background: var(--danger);
 }
 
-.badge-todo     { background: var(--background); color: var(--text-muted); }
-.badge-progress { background: #FFF8E6; color: #B45309; }
-.badge-done     { background: var(--success-bg); color: var(--success-text); }
+.prio-medium {
+  background: var(--warning);
+}
+
+.prio-low {
+  background: var(--success);
+}
+
+
+.status-select {
+  width: 100%;
+  max-width: 120px;
+
+  padding: 5px 8px;
+
+  border: none;
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.badge-todo {
+  background: var(--background);
+  color: var(--text-muted);
+}
+
+.badge-progress {
+  background: #fff8e6;
+  color: #b45309;
+}
+
+.badge-done {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
 
 .overdue-date {
   color: var(--danger);
-  font-weight: 600;
+
   font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .assignee-cell {
   display: flex;
   align-items: center;
   gap: 8px;
+
+  min-width: 0;
 }
 
 .assignee-av {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--primary);
-  color: white;
-  font-size: 9px;
-  font-weight: 700;
+  width: 27px;
+  height: 27px;
+
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: var(--primary);
+  color: white;
+
+  font-size: 9px;
+  font-weight: 700;
 }
 
 .assignee-name {
-  font-size: 12px;
+  min-width: 0;
+
   color: var(--text-secondary);
+
+  font-size: 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .action-btns {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+
+  white-space: nowrap;
 }
 
 .btn-icon {
   width: 30px;
   height: 30px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: var(--background);
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  flex-shrink: 0;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+
+  background: var(--background);
+
   font-size: 13px;
+
   cursor: pointer;
-  transition: all 0.12s;
+
   text-decoration: none;
+
+  transition: all 0.12s ease;
 }
 
-.btn-icon:hover { background: var(--border); }
+.btn-icon:hover {
+  background: var(--border);
+}
 
 .btn-del:hover {
   background: var(--danger-bg);

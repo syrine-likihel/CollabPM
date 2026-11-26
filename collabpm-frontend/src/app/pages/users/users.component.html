@@ -1,0 +1,441 @@
+<div class="layout">
+
+  <app-sidebar />
+
+  <div class="main">
+
+    <app-topbar
+      pageTitle="Users"
+      pageSubtitle="Manage system users and access roles"
+    />
+
+    <div class="content">
+
+
+      <section class="stats-grid">
+
+        <article class="stat-card">
+          <p class="stat-label">
+            Total users
+          </p>
+
+          <strong class="stat-value">
+            {{ totalUsers }}
+          </strong>
+        </article>
+
+
+        <article class="stat-card">
+          <p class="stat-label">
+            Admins
+          </p>
+
+          <strong class="stat-value">
+            {{ adminUsers }}
+          </strong>
+        </article>
+
+
+        <article class="stat-card">
+          <p class="stat-label">
+            Project Managers
+          </p>
+
+          <strong class="stat-value">
+            {{ managerUsers }}
+          </strong>
+        </article>
+
+
+        <article class="stat-card">
+          <p class="stat-label">
+            Members
+          </p>
+
+          <strong class="stat-value">
+            {{ memberUsers }}
+          </strong>
+        </article>
+
+      </section>
+
+      <section class="toolbar-card">
+
+        <div class="toolbar-left">
+
+          <div class="search-wrap">
+
+            <span class="search-icon">
+              🔍
+            </span>
+
+            <input
+              type="text"
+              [(ngModel)]="searchText"
+              placeholder="Search by full name or email"
+              class="search-input"
+            />
+
+          </div>
+
+
+          <div class="role-filters">
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="roleFilter === 'ALL'"
+              (click)="roleFilter = 'ALL'"
+            >
+              All
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="roleFilter === 'ADMIN'"
+              (click)="roleFilter = 'ADMIN'"
+            >
+              Admin
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="roleFilter === 'PROJECT_MANAGER'"
+              (click)="roleFilter = 'PROJECT_MANAGER'"
+            >
+              Project Manager
+            </button>
+
+
+            <button
+              type="button"
+              class="filter-btn"
+              [class.active]="roleFilter === 'MEMBER'"
+              (click)="roleFilter = 'MEMBER'"
+            >
+              Member
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="primary-btn"
+          (click)="openCreateForm()"
+        >
+          New User
+        </button>
+
+      </section>
+
+
+      @if (showCreateForm) {
+
+        <section class="panel form-panel">
+
+          <div class="panel-header">
+
+            <div>
+
+              <p class="panel-eyebrow">
+                Create user
+              </p>
+
+              <h2>
+                New User
+              </h2>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="ghost-btn"
+              (click)="closeCreateForm()"
+            >
+              Close
+            </button>
+
+          </div>
+
+
+          <div class="form-grid">
+
+            <label>
+
+              <span>
+                Full name
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="createForm.fullName"
+                placeholder="Jane Doe"
+              />
+
+            </label>
+
+
+            <label>
+
+              <span>
+                Email
+              </span>
+
+              <input
+                type="email"
+                [(ngModel)]="createForm.email"
+                placeholder="jane@example.com"
+              />
+
+            </label>
+
+
+            <label>
+
+              <span>
+                Password
+              </span>
+
+              <input
+                type="password"
+                [(ngModel)]="createForm.password"
+                placeholder="••••••••"
+              />
+
+            </label>
+
+          </div>
+
+
+          <div class="form-actions">
+
+            <p class="hint">
+              New users are created as Members.
+              You can change their role afterwards.
+            </p>
+
+
+            <div class="action-row">
+
+              <button
+                type="button"
+                class="ghost-btn"
+                (click)="closeCreateForm()"
+              >
+                Cancel
+              </button>
+
+
+              <button
+                type="button"
+                class="primary-btn"
+                (click)="createUser()"
+                [disabled]="submitting"
+              >
+
+                @if (submitting) {
+
+                  Saving...
+
+                } @else {
+
+                  Create user
+
+                }
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      }
+
+      @if (loading) {
+
+        <section class="state-card">
+
+          <div class="spinner"></div>
+
+          <span>
+            Loading users...
+          </span>
+
+        </section>
+
+      } @else {
+
+        @if (isEmptyState) {
+
+          <section class="state-card empty">
+
+            <strong>
+              No users found
+            </strong>
+
+            <span>
+              Try a different search or role filter.
+            </span>
+
+          </section>
+
+        } @else {
+
+          <section class="panel table-panel">
+
+            <div class="panel-header">
+
+              <div>
+
+                <p class="panel-eyebrow">
+                  Directory
+                </p>
+
+                <h2>
+                  System users
+                </h2>
+
+              </div>
+
+
+              <span class="count-pill">
+                {{ filteredUsers.length }} shown
+              </span>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+              <table class="users-table">
+
+                <thead>
+
+                  <tr>
+
+                    <th>
+                      Full name
+                    </th>
+
+                    <th>
+                      Email
+                    </th>
+
+                    <th>
+                      Role
+                    </th>
+
+                    <th>
+                      Created date
+                    </th>
+
+                    <th>
+                      Actions
+                    </th>
+
+                  </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                  @for (
+                    user of filteredUsers;
+                    track trackByUserId($index, user)
+                  ) {
+
+                    <tr>
+
+                      
+
+                      <td>
+
+                        <div class="user-name">
+                          {{ user.fullName }}
+                        </div>
+
+                      </td>
+
+
+                     
+
+                      <td>
+                        {{ user.email }}
+                      </td>
+
+
+                   
+
+                      <td>
+
+                        <select
+                          class="role-select"
+                          [value]="user.role"
+                          (change)="changeRole(user, $event)"
+                        >
+
+                          <option value="MEMBER">
+                            Member
+                          </option>
+
+                          <option value="PROJECT_MANAGER">
+                            Project Manager
+                          </option>
+
+                          <option value="ADMIN">
+                            Admin
+                          </option>
+
+                        </select>
+
+                      </td>
+
+                      <td>
+                        {{ user.createdAt }}
+                      </td>
+
+
+                      <td>
+
+                        <button
+                          type="button"
+                          class="delete-btn"
+                          (click)="deleteUser(user)"
+                        >
+                          Delete
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  }
+
+                </tbody>
+
+              </table>
+
+            </div>
+
+          </section>
+
+        }
+
+      }
+
+    </div>
+
+  </div>
+
+</div>

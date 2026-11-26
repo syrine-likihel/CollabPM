@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-project-card',
@@ -11,32 +12,52 @@ import { RouterLink } from '@angular/router';
 export class ProjectCardComponent {
 
   @Input() project: any;
+  @Input() memberCount = 0;
+
   @Output() onDelete = new EventEmitter<number>();
   @Output() onEdit = new EventEmitter<number>();
 
-  getStatusLabel(status: string): string {
-    const map: any = {
-      'PLANNED': 'Planned',
-      'IN_PROGRESS': 'In Progress',
-      'COMPLETED': 'Completed'
-    };
-    return map[status] || status;
-  }
+  constructor(
+    public authService: AuthService
+  ) {}
 
   getStatusClass(status: string): string {
-    const map: any = {
-      'PLANNED': 'badge-planned',
-      'IN_PROGRESS': 'badge-progress',
-      'COMPLETED': 'badge-done'
-    };
-    return map[status] || '';
+    switch (status) {
+      case 'PLANNED':
+        return 'status-planned';
+
+      case 'IN_PROGRESS':
+        return 'status-progress';
+
+      case 'COMPLETED':
+        return 'status-completed';
+
+      default:
+        return '';
+    }
   }
 
-  delete() {
-    this.onDelete.emit(this.project.id);
+  getStatusLabel(status: string): string {
+    switch (status) {
+      case 'PLANNED':
+        return 'Planned';
+
+      case 'IN_PROGRESS':
+        return 'In Progress';
+
+      case 'COMPLETED':
+        return 'Completed';
+
+      default:
+        return status;
+    }
   }
 
-  edit() {
+  edit(): void {
     this.onEdit.emit(this.project.id);
+  }
+
+  delete(): void {
+    this.onDelete.emit(this.project.id);
   }
 }

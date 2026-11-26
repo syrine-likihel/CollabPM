@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
- imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -14,23 +15,51 @@ export class LoginComponent {
   email = '';
   password = '';
   loading = false;
-  error = '';
   showPassword = false;
+  submitted = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
+
+  get emailInvalid() {
+    return this.submitted && (!this.email || !this.isValidEmail(this.email));
+  }
+
+  get passwordInvalid() {
+    return this.submitted && !this.password;
+  }
+
+  isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
   onSubmit() {
-    if (!this.email || !this.password) {
-      this.error = 'Please fill in all fields';
+    this.submitted = true;
+
+    if (!this.email || !this.isValidEmail(this.email)) {
+      this.alertService.error('Please enter a valid email address');
       return;
     }
-    this.loading = true;
-    this.error = '';
+    if (!this.password) {
+      this.alertService.error('Password is required');
+      return;
+    }
 
-    // Temporary — will connect to backend after JWT module
-    setTimeout(() => {
-      this.loading = false;
-      this.router.navigate(['/dashboard']);
-    }, 1000);
+    this.loading = true;
+
+    this.authService.login(this.email, this.password).subscribe({
+      next: () => {
+        this.loading = false;
+        this.alertService.success('Welcome back!');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.alertService.error(err.userMessage || 'Invalid email or password');
+      }
+    });
   }
 }

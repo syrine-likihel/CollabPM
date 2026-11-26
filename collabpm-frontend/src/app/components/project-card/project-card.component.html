@@ -1,57 +1,136 @@
 <div class="project-card" [class.late]="project.late">
 
+
   <div class="card-header">
+
     <div class="card-title-wrap">
-      <h3 class="card-title">{{ project.name }}</h3>
-      <p class="card-desc">{{ project.description }}</p>
+
+      <h3 class="card-title">
+        {{ project.name }}
+      </h3>
+
+      <p class="card-desc">
+        {{ project.description || 'No description' }}
+      </p>
+
     </div>
-    <span class="badge" [class]="getStatusClass(project.status)">
+
+    <span
+      class="badge"
+      [class]="getStatusClass(project.status)"
+    >
       {{ getStatusLabel(project.status) }}
     </span>
+
   </div>
 
+
+  <!-- PROJECT INFO -->
   <div class="card-info">
+
+    
     <div class="info-item">
       <span class="info-icon">👤</span>
-      <span>{{ project.owner }}</span>
+
+      <span>
+        {{ project.ownerName || 'No owner' }}
+      </span>
     </div>
+
+
+    <!-- DATES -->
     <div class="info-item">
       <span class="info-icon">📅</span>
-      <span>{{ project.startDate }} → {{ project.endDate }}</span>
-    </div>
-    <div class="info-item">
-      <span class="info-icon">✅</span>
-      <span>{{ project.doneTasks }}/{{ project.tasks }} tasks done</span>
-    </div>
-  </div>
 
-  <div class="progress-wrap">
-    <div class="progress-header">
-      <span class="progress-label">Progress</span>
-      <span class="progress-value">{{ project.progress }}%</span>
+      <span>
+        {{ project.startDate }}
+        →
+        {{ project.endDate }}
+      </span>
     </div>
+
+
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+
+    <div class="progress-header">
+
+      <span class="progress-label">
+        Progress
+      </span>
+
+      <span class="progress-value">
+        {{ project.progress || 0 }}%
+      </span>
+
+    </div>
+
     <div class="progress-bar">
+
       <div
         class="progress-fill"
-        [style.width.%]="project.progress"
+        [style.width.%]="project.progress || 0"
         [class.fill-late]="project.late"
-        [class.fill-done]="project.status === 'COMPLETED'">
+        [class.fill-done]="project.status === 'COMPLETED'"
+      >
       </div>
+
     </div>
+
   </div>
 
+
+  <!-- FOOTER -->
   <div class="card-footer">
+
+    <!-- MEMBERS COUNT -->
     <div class="members-group">
-      @for (m of project.members; track m) {
-        <div class="member-av">{{ m }}</div>
-      }
-      <span class="members-count">{{ project.members.length }} members</span>
+
+      <span class="members-count">
+        👥 {{ project.memberCount || 0 }}
+        {{ (project.memberCount || 0) === 1 ? 'member' : 'members' }}
+      </span>
+
     </div>
+
+
+    <!-- ACTIONS -->
     <div class="card-actions">
-      <a routerLink="/kanban" class="btn-view">View</a>
-      <button class="btn-edit" (click)="edit()">Edit</button>
-      <button class="btn-delete" (click)="delete()">🗑</button>
+
+      <!-- VIEW -->
+      <a
+        [routerLink]="['/kanban', project.id]"
+        class="btn-view"
+      >
+        View
+      </a>
+
+
+      <!-- EDIT + DELETE -->
+      @if (authService.isManagerOrAdmin()) {
+
+        <button
+          type="button"
+          class="btn-edit"
+          (click)="edit()"
+        >
+          Edit
+        </button>
+
+        <button
+          type="button"
+          class="btn-delete"
+          (click)="delete()"
+          title="Delete project"
+        >
+          🗑
+        </button>
+
+      }
+
     </div>
+
   </div>
 
 </div>

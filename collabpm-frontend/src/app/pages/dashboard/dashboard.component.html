@@ -2,75 +2,102 @@
   <app-sidebar />
   <div class="main">
     <app-topbar
-      pageTitle="Dashboard"
-      pageSubtitle="Welcome back, Ahmed 👋"
+      [pageTitle]="'Dashboard'"
+      [pageSubtitle]="'Welcome back, ' + userName + ' 👋'"
       buttonLabel="New Project"
       buttonLink="/projects/new"
     />
 
     <div class="content">
+      
 
-      <!-- Stats using StatCard component -->
-      <div class="stats-grid">
-        @for (stat of stats; track stat.label) {
-          <app-stat-card
-            [label]="stat.label"
-            [value]="stat.value"
-            [icon]="stat.icon"
-            [color]="stat.color"
-            [change]="stat.change"
-          />
-        }
-      </div>
+      @if (loading) {
+        <div class="loading-wrap">
+          <div class="spinner-lg"></div>
+          <span>Loading dashboard...</span>
+        </div>
+      }
 
-      <div class="dashboard-grid">
+      @if (!loading) {
 
-        <!-- Projects using ProjectCard component -->
-        <div class="section">
-          <div class="section-header">
-            <h3 class="section-title">Recent Projects</h3>
-            <a routerLink="/projects" class="see-all">See all →</a>
-          </div>
-          <div class="projects-list">
-            @for (project of projects; track project.id) {
-              <app-project-card
-                [project]="project"
-                (onDelete)="onDelete($event)"
-                (onEdit)="onEdit($event)"
-              />
-            }
-          </div>
+        <div class="stats-grid">
+          @for (stat of stats; track stat.label) {
+            <app-stat-card
+              [label]="stat.label"
+              [value]="stat.value"
+              [icon]="stat.icon"
+              [color]="stat.color"
+              [change]="stat.change"
+            />
+          }
         </div>
 
-        <!-- Recent Tasks -->
-        <div class="section">
-          <div class="section-header">
-            <h3 class="section-title">Recent Tasks</h3>
-            <a routerLink="/tasks" class="see-all">See all →</a>
-          </div>
-          <div class="tasks-list">
-            @for (task of recentTasks; track task.title) {
-              <div class="task-row">
-                <div class="task-info">
-                  <div class="task-title">{{ task.title }}</div>
-                  <div class="task-meta">
-                    <span class="task-project">{{ task.project }}</span>
-                    <span class="task-due">📅 {{ task.due }}</span>
-                  </div>
-                </div>
-                <div class="task-right">
-                  <span class="prio-dot" [class]="getPriorityClass(task.priority)"></span>
-                  <span class="badge" [class]="getTaskStatusClass(task.status)">
-                    {{ getTaskStatusLabel(task.status) }}
-                  </span>
-                  <div class="task-avatar">{{ task.assignee }}</div>
-                </div>
+        <div class="dashboard-grid">
+          <div class="section">
+            <div class="section-header">
+              <h3 class="section-title">Recent Projects</h3>
+              <a routerLink="/projects" class="see-all">See all →</a>
+            </div>
+            @if (projects.length === 0) {
+              <div class="empty-state">
+                <div class="empty-icon">📁</div>
+                <div class="empty-title">No projects yet</div>
+                <a routerLink="/projects/new" class="btn-new-sm">+ New Project</a>
               </div>
             }
+            <div class="projects-list">
+              @for (project of projects; track project.id) {
+                <app-project-card
+                  [project]="project"
+                  [memberCount]="project.memberCount ?? 0"
+                  (onDelete)="onDelete($event)"
+                  (onEdit)="onEdit($event)"
+                />
+              }
+            </div>
           </div>
-        </div>
 
-      </div>
+          <!-- Recent Tasks -->
+          <div class="section">
+            <div class="section-header">
+              <h3 class="section-title">Recent Tasks</h3>
+              <a routerLink="/tasks" class="see-all">See all →</a>
+            </div>
+            @if (recentTasks.length === 0) {
+              <div class="empty-state">
+                <div class="empty-icon">✅</div>
+                <div class="empty-title">No tasks yet</div>
+                <a routerLink="/tasks/new" class="btn-new-sm">+ New Task</a>
+              </div>
+            }
+            <div class="tasks-list">
+              @for (task of recentTasks; track task.id) {
+                <div class="task-row">
+                  <div class="task-info">
+                    <div class="task-title" [class.done-title]="task.status === 'DONE'">
+                      {{ task.title }}
+                    </div>
+                    <div class="task-meta">
+                      <span class="task-project">{{ task.projectName }}</span>
+                      <span class="task-due">📅 {{ task.dueDate }}</span>
+                    </div>
+                  </div>
+                  <div class="task-right">
+                    <span class="prio-dot" [class]="getPriorityClass(task.priority)"></span>
+                    <span class="badge" [class]="getTaskStatusClass(task.status)">
+                      {{ getTaskStatusLabel(task.status) }}
+                    </span>
+                    <div class="task-avatar">
+                      {{ task.assignedToName ? task.assignedToName.substring(0,2).toUpperCase() : 'UN' }}
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+        </div>
+      }
     </div>
   </div>
 </div>

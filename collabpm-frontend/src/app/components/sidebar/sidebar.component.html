@@ -1,34 +1,100 @@
 <div class="sidebar">
 
+  <!-- Logo -->
   <div class="sidebar-logo">
     <div class="logo-icon">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <rect width="24" height="24" rx="6" fill="white" fill-opacity="0.15"/>
-        <path d="M6 8h12M6 12h8M6 16h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          width="24"
+          height="24"
+          rx="6"
+          fill="white"
+          fill-opacity="0.15"
+        />
+
+        <path
+          d="M6 8H18M6 12H14M6 16H16"
+          stroke="white"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
       </svg>
     </div>
+
     <span class="logo-text">CollabPM</span>
   </div>
 
+
+  <!-- Navigation -->
   <nav class="sidebar-nav">
-    <div class="nav-section-label">MAIN</div>
+
+    <div class="nav-section-label">
+      MAIN
+    </div>
+
     @for (item of menuItems; track item.path) {
-      <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
-        <span class="nav-icon">{{ item.icon }}</span>
-        <span class="nav-label">{{ item.label }}</span>
+
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-item"
+      >
+
+        <span class="nav-icon">
+          {{ item.icon }}
+        </span>
+
+        <span class="nav-label">
+          {{ item.label }}
+        </span>
+
       </a>
+
     }
+
   </nav>
 
+
+  <!-- User section -->
   <div class="sidebar-bottom">
+
     <div class="user-info">
-      <div class="user-avatar">AT</div>
-      <div class="user-details">
-        <div class="user-name">Ahmed Test</div>
-        <div class="user-role">Admin</div>
+
+      <div class="user-avatar">
+        {{ userInitials || 'U' }}
       </div>
+
+      <div class="user-details">
+
+        <div class="user-name">
+          {{ userName || 'User' }}
+        </div>
+
+        <div class="user-role">
+          {{ userRole || 'MEMBER' }}
+        </div>
+
+      </div>
+
     </div>
-    <a routerLink="/login" class="logout-btn" title="Logout">⏻</a>
+
+    <button
+      type="button"
+      class="logout-btn"
+      (click)="logout()"
+      title="Logout"
+      aria-label="Logout"
+    >
+      ⏻
+    </button>
+
   </div>
 
 </div>

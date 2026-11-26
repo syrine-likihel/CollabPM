@@ -1,80 +1,238 @@
 <div class="layout">
-  <app-sidebar />
+
+  <app-sidebar></app-sidebar>
+
   <div class="main">
-    <app-topbar
-      pageTitle="Members"
-      pageSubtitle="Manage your team members"
-      buttonLabel="Invite Member"
-      buttonLink=""
-    />
 
-    <div class="content">
+    <div class="project-bar">
 
-      <div class="member-stats">
-        <div class="mstat">
-          <div class="mstat-value">{{ counts.all }}</div>
-          <div class="mstat-label">Total members</div>
-        </div>
-        <div class="mstat-divider"></div>
-        <div class="mstat">
-          <div class="mstat-value" style="color:var(--primary)">{{ counts.admins }}</div>
-          <div class="mstat-label">Admins</div>
-        </div>
-        <div class="mstat-divider"></div>
-        <div class="mstat">
-          <div class="mstat-value" style="color:var(--success)">{{ counts.managers }}</div>
-          <div class="mstat-label">Managers</div>
-        </div>
-        <div class="mstat-divider"></div>
-        <div class="mstat">
-          <div class="mstat-value" style="color:var(--warning)">{{ counts.members }}</div>
-          <div class="mstat-label">Members</div>
-        </div>
+      <div class="project-select-wrap">
+        <span>📁</span>
+
+        <select
+          class="project-select"
+          [value]="selectedProjectId ?? ''"
+          (change)="onProjectChange($event)"
+        >
+
+          <option value="" disabled>
+            Select a project
+          </option>
+
+          @for (project of projects; track project.id) {
+            <option [value]="project.id">
+              {{ project.name }}
+            </option>
+          }
+
+        </select>
       </div>
 
-      <div class="filters-row">
-        <div class="role-filters">
-          <button class="filter-btn" [class.active]="roleFilter === 'ALL'" (click)="roleFilter = 'ALL'">
-            All <span class="count">{{ counts.all }}</span>
-          </button>
-          <button class="filter-btn" [class.active]="roleFilter === 'ADMIN'" (click)="roleFilter = 'ADMIN'">
-            Admins <span class="count">{{ counts.admins }}</span>
-          </button>
-          <button class="filter-btn" [class.active]="roleFilter === 'PROJECT_MANAGER'" (click)="roleFilter = 'PROJECT_MANAGER'">
-            Managers <span class="count">{{ counts.managers }}</span>
-          </button>
-          <button class="filter-btn" [class.active]="roleFilter === 'MEMBER'" (click)="roleFilter = 'MEMBER'">
-            Members <span class="count">{{ counts.members }}</span>
-          </button>
-        </div>
-        <div class="search-wrap">
-          <span>🔍</span>
-          <input
-            type="text"
-            [(ngModel)]="searchText"
-            placeholder="Search members..."
-            class="search-input"
-          />
-        </div>
-      </div>
+      @if (canInvite) {
 
-      <div class="members-grid">
-        @for (member of filtered; track member.id) {
-          <app-member-card
-            [member]="member"
-            (onRemove)="onRemove($event)"
-          />
-        }
-      </div>
+        <button
+          class="btn-invite"
+          type="button"
+          (click)="showInviteForm = !showInviteForm"
+        >
+          + Invite Member
+        </button>
 
-      @if (filtered.length === 0) {
-        <div class="empty-state">
-          <div class="empty-icon">👥</div>
-          <div class="empty-title">No members found</div>
-          <div class="empty-sub">Try changing the search or filter</div>
-        </div>
       }
 
     </div>
+
+    @if (showInviteForm && canInvite) {
+
+      <div class="invite-form">
+
+        <h3 class="invite-title">
+          Add member to project
+        </h3>
+
+
+        <div class="invite-grid">
+
+          <div class="form-group">
+
+            <label for="user">
+              User
+            </label>
+
+            <select
+              id="user"
+              [(ngModel)]="inviteForm.userId"
+            >
+
+              <option value="">
+                Select user...
+              </option>
+
+              @for (user of users; track user.id) {
+
+                <option [value]="user.id">
+                  {{ user.fullName }} — {{ user.email }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+          <div class="form-group">
+
+            <label for="project">
+              Project
+            </label>
+
+            <select
+              id="project"
+              [(ngModel)]="inviteForm.projectId"
+            >
+
+              <option value="">
+                Select project...
+              </option>
+
+              @for (project of projects; track project.id) {
+
+                <option [value]="project.id">
+                  {{ project.name }}
+                </option>
+
+              }
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label for="role">
+              Role in project
+            </label>
+
+            <input
+              id="role"
+              type="text"
+              [(ngModel)]="inviteForm.roleInProject"
+              placeholder="e.g. Developer"
+            />
+
+          </div>
+
+        </div>
+
+        <div class="invite-actions">
+
+          <button
+            class="btn-cancel-sm"
+            type="button"
+            (click)="cancelInvite()"
+          >
+            Cancel
+          </button>
+
+
+          <button
+            class="btn-submit-sm"
+            type="button"
+            (click)="onInvite()"
+          >
+            Add Member
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- SEARCH -->
+    <div class="filters-row">
+
+      <div class="search-wrap">
+
+        <span>🔍</span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          placeholder="Search members..."
+          class="search-input"
+        />
+
+      </div>
+
+
+      <div class="member-count">
+
+        {{ filtered.length }}
+
+        member{{ filtered.length !== 1 ? 's' : '' }}
+
+      </div>
+
+    </div>
+
+    @if (loading) {
+
+      <div class="loading-wrap">
+
+        <div class="spinner-lg"></div>
+
+        <span>
+          Loading members...
+        </span>
+
+      </div>
+
+    }
+
+    @if (!loading) {
+
+      @if (filtered.length > 0) {
+
+        <div class="members-grid">
+
+          @for (member of filtered; track member.id) {
+
+            <app-member-card
+              [member]="member"
+              [showRemove]="canRemove"
+              (onRemove)="onRemove($event)"
+            >
+            </app-member-card>
+
+          }
+
+        </div>
+
+      }
+
+      @if (filtered.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            👥
+          </div>
+
+          <div class="empty-title">
+            No members found
+          </div>
+
+          <div class="empty-sub">
+            Add members to this project
+          </div>
+
+        </div>
+
+      }
+
+    }
+
   </div>
+
 </div>

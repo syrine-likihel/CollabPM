@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -14,33 +16,61 @@ export class RegisterComponent {
   email = '';
   password = '';
   confirmPassword = '';
-  role = 'MEMBER';
   loading = false;
-  error = '';
   showPassword = false;
+  submitted = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertService: AlertService
+  ) {}
+
+  isValidEmail(email: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  get errors() {
+    return {
+      fullName: this.submitted && !this.fullName,
+      email: this.submitted && (!this.email || !this.isValidEmail(this.email)),
+      password: this.submitted && this.password.length < 6,
+      confirmPassword: this.submitted && this.password !== this.confirmPassword,
+    };
+  }
+
+  isFormValid(): boolean {
+    return !!this.fullName &&
+      !!this.email &&
+      this.isValidEmail(this.email) &&
+      this.password.length >= 6 &&
+      this.password === this.confirmPassword;
+  }
 
   onSubmit() {
-    if (!this.fullName || !this.email || !this.password || !this.confirmPassword) {
-      this.error = 'Please fill in all fields';
-      return;
-    }
-    if (this.password !== this.confirmPassword) {
-      this.error = 'Passwords do not match';
-      return;
-    }
-    if (this.password.length < 6) {
-      this.error = 'Password must be at least 6 characters';
+    this.submitted = true;
+
+    if (!this.isFormValid()) {
+      this.alertService.error('Please fix the errors before submitting');
       return;
     }
 
     this.loading = true;
-    this.error = '';
 
-    setTimeout(() => {
-      this.loading = false;
-      this.router.navigate(['/login']);
-    }, 1000);
+    this.authService.register({
+      fullName: this.fullName,
+      email: this.email,
+      password: this.password,
+    }).subscribe({
+      next: () => {
+        this.loading = false;
+        this.alertService.success('Account created successfully!');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.alertService.error(err.userMessage || 'Registration failed');
+      }
+    });
   }
 }

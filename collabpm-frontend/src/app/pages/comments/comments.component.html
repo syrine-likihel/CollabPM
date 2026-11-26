@@ -1,0 +1,117 @@
+<div class="layout">
+  <app-sidebar />
+
+  <div class="main">
+    <app-topbar
+      pageTitle="Comments"
+      [pageSubtitle]="task?.title || 'Task comments'"
+    />
+
+    <div class="content">
+      <div class="comments-container">
+
+        @if (task) {
+          <div class="task-info-card">
+            <div class="task-info-title">{{ task.title }}</div>
+
+            <div class="task-info-meta">
+              <span class="badge badge-project">
+                {{ task.projectName }}
+              </span>
+
+              <span class="task-due">
+                📅 {{ task.dueDate }}
+              </span>
+            </div>
+          </div>
+        }
+
+        <!-- Comments list -->
+        @if (loading) {
+          <div class="loading-wrap">
+            <div class="spinner-lg"></div>
+          </div>
+        }
+
+        @if (!loading) {
+          <div class="comments-list">
+
+            @for (comment of comments; track comment.id) {
+              <div class="comment-row">
+
+                <div class="comment-av">
+                  {{ getInitials(comment.authorName) }}
+                </div>
+
+                <div class="comment-body">
+
+                  <div class="comment-header">
+                    <span class="comment-author">
+                      {{ comment.authorName }}
+                    </span>
+
+                    <span class="comment-time">
+                      {{ comment.createdAt }}
+                    </span>
+
+                    @if (authService.isAdmin()) {
+                      <button
+                        class="btn-del-comment"
+                        (click)="deleteComment(comment.id)"
+                      >
+                        🗑
+                      </button>
+                    }
+                  </div>
+
+                  <div class="comment-text">
+                    {{ comment.content }}
+                  </div>
+
+                </div>
+              </div>
+            }
+
+            @if (comments.length === 0) {
+              <div class="empty-state">
+                <div class="empty-icon">💬</div>
+                <div class="empty-title">No comments yet</div>
+                <div class="empty-sub">
+                  Be the first to comment
+                </div>
+              </div>
+            }
+
+          </div>
+
+          <!-- Add comment -->
+          <div class="add-comment">
+
+            <div class="comment-av">
+              {{ getInitials(authService.getFullName()) }}
+            </div>
+
+            <div class="comment-input-wrap">
+
+              <textarea
+                [(ngModel)]="newComment"
+                placeholder="Add a comment..."
+                rows="3"
+                class="comment-input"
+              ></textarea>
+
+              <button
+                class="btn-send"
+                (click)="addComment()"
+              >
+                Send ✈
+              </button>
+
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+  </div>
+</div>

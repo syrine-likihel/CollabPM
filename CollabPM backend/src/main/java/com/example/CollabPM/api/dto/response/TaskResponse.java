@@ -15,8 +15,15 @@ public class TaskResponse {
     private Priority priority;
     private TaskStatus status;
     private LocalDate dueDate;
+
     private String projectName;
+    private Long projectId;
+
     private String assignedToName;
+    private Long assignedToId;
+
     private LocalDateTime createdAt;
     private boolean overdue;
+
+    private boolean canChangeStatus;
 }

@@ -1,0 +1,14 @@
+<div class="toast-container">
+  @for (alert of alertService.alerts(); track alert.id) {
+    <div class="toast" [class]="'toast-' + alert.type">
+      <span class="toast-icon">
+        @if (alert.type === 'success') { ✅ }
+        @if (alert.type === 'error') { ❌ }
+        @if (alert.type === 'warning') { ⚠️ }
+        @if (alert.type === 'info') { ℹ️ }
+      </span>
+      <span class="toast-msg">{{ alert.message }}</span>
+      <button class="toast-close" (click)="alertService.remove(alert.id)">✕</button>
+    </div>
+  }
+</div>

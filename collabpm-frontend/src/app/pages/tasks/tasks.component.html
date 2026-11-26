@@ -1,86 +1,262 @@
 <div class="layout">
+
   <app-sidebar />
+
   <div class="main">
+
     <app-topbar
       pageTitle="Tasks"
       pageSubtitle="Track and manage all tasks"
-      buttonLabel="New Task"
+      [buttonLabel]="
+        authService.isManagerOrAdmin()
+          ? 'New Task'
+          : ''
+      "
       buttonLink="/tasks/new"
     />
 
     <div class="content">
 
       <div class="filters-row">
+
         <div class="status-filters">
-          <button class="filter-btn" [class.active]="statusFilter === 'ALL'" (click)="statusFilter = 'ALL'">
-            All <span class="count">{{ counts.all }}</span>
+
+          <button
+            type="button"
+            class="filter-btn"
+            [class.active]="statusFilter === 'ALL'"
+            (click)="statusFilter = 'ALL'"
+          >
+            All
+
+            <span class="count">
+              {{ counts.all }}
+            </span>
           </button>
-          <button class="filter-btn" [class.active]="statusFilter === 'TODO'" (click)="statusFilter = 'TODO'">
-            To do <span class="count">{{ counts.todo }}</span>
+
+
+          <!-- TO DO -->
+
+          <button
+            type="button"
+            class="filter-btn"
+            [class.active]="statusFilter === 'TO_DO'"
+            (click)="statusFilter = 'TO_DO'"
+          >
+            To do
+
+            <span class="count">
+              {{ counts.todo }}
+            </span>
           </button>
-          <button class="filter-btn" [class.active]="statusFilter === 'IN_PROGRESS'" (click)="statusFilter = 'IN_PROGRESS'">
-            In Progress <span class="count">{{ counts.inProgress }}</span>
+
+
+          <!-- IN PROGRESS -->
+
+          <button
+            type="button"
+            class="filter-btn"
+            [class.active]="statusFilter === 'IN_PROGRESS'"
+            (click)="statusFilter = 'IN_PROGRESS'"
+          >
+            In Progress
+
+            <span class="count">
+              {{ counts.inProgress }}
+            </span>
           </button>
-          <button class="filter-btn" [class.active]="statusFilter === 'DONE'" (click)="statusFilter = 'DONE'">
-            Done <span class="count">{{ counts.done }}</span>
+
+
+          <!-- DONE -->
+
+          <button
+            type="button"
+            class="filter-btn"
+            [class.active]="statusFilter === 'DONE'"
+            (click)="statusFilter = 'DONE'"
+          >
+            Done
+
+            <span class="count">
+              {{ counts.done }}
+            </span>
           </button>
-          <button class="filter-btn filter-late" [class.active]="statusFilter === 'OVERDUE'" (click)="statusFilter = 'OVERDUE'">
-            Overdue <span class="count">{{ counts.overdue }}</span>
+
+
+          <!-- OVERDUE -->
+
+          <button
+            type="button"
+            class="filter-btn filter-late"
+            [class.active]="statusFilter === 'OVERDUE'"
+            (click)="statusFilter = 'OVERDUE'"
+          >
+            Overdue
+
+            <span class="count">
+              {{ counts.overdue }}
+            </span>
           </button>
+
         </div>
 
         <div class="right-filters">
-          <select [(ngModel)]="priorityFilter" class="select-filter">
-            <option value="ALL">All priorities</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
+
+          <!-- PRIORITY -->
+
+          <select
+            [(ngModel)]="priorityFilter"
+            class="select-filter"
+          >
+
+            <option value="ALL">
+              All priorities
+            </option>
+
+            <option value="HIGH">
+              High
+            </option>
+
+            <option value="MEDIUM">
+              Medium
+            </option>
+
+            <option value="LOW">
+              Low
+            </option>
+
           </select>
+
           <div class="search-wrap">
-            <span>🔍</span>
+
+            <span class="search-icon">
+              🔍
+            </span>
+
             <input
               type="text"
               [(ngModel)]="searchText"
               placeholder="Search tasks..."
               class="search-input"
             />
+
           </div>
+
         </div>
+
       </div>
 
-      <div class="table-wrap">
-        <table class="tasks-table">
-          <thead>
-            <tr>
-              <th>Task</th>
-              <th>Project</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>Due date</th>
-              <th>Assigned to</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (task of filtered; track task.id) {
-              <app-task-card
-                [task]="task"
-                (onDelete)="onDelete($event)"
-                (onStatusChange)="onStatusChange($event)"
-              />
-            }
-          </tbody>
-        </table>
+      @if (loading) {
 
-        @if (filtered.length === 0) {
-          <div class="empty-state">
-            <div class="empty-icon">✅</div>
-            <div class="empty-title">No tasks found</div>
-            <div class="empty-sub">Try changing the filters or create a new task</div>
-          </div>
-        }
-      </div>
+        <div class="loading-wrap">
+
+          <div class="spinner-lg"></div>
+
+          <span>
+            Loading tasks...
+          </span>
+
+        </div>
+
+      }
+
+      @if (!loading) {
+
+        <div class="table-wrap">
+
+          <table class="tasks-table">
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Task
+                </th>
+
+                <th>
+                  Project
+                </th>
+
+                <th>
+                  Priority
+                </th>
+
+                <th>
+                  Status
+                </th>
+
+                <th>
+                  Due date
+                </th>
+
+                <th>
+                  Assigned to
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              @for (
+                task of filtered;
+                track task.id
+              ) {
+
+                <tr
+                  app-task-card
+                  class="task-row"
+                  [class.overdue-row]="task.overdue"
+
+                  [task]="task"
+
+                  (onDelete)="onDelete($event)"
+
+                  (onStatusChange)="
+                    onStatusChange($event)
+                  "
+                ></tr>
+
+              }
+
+            </tbody>
+
+          </table>
+          
+          @if (filtered.length === 0) {
+
+            <div class="empty-state">
+
+              <div class="empty-icon">
+                ✅
+              </div>
+
+              <div class="empty-title">
+                No tasks found
+              </div>
+
+              <div class="empty-sub">
+                Try changing the filters or create
+                a new task
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      }
 
     </div>
+
   </div>
+
 </div>

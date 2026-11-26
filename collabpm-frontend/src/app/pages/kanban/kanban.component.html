@@ -4,22 +4,26 @@
     <app-topbar
       pageTitle="Kanban Board"
       [pageSubtitle]="projectName"
-      buttonLabel="New Task"
-      buttonLink="/tasks/new"
     />
 
     <div class="content">
 
-      <!-- Project selector -->
       <div class="board-header">
         <div class="project-select-wrap">
-          <span class="project-icon">📁</span>
-          <select class="project-select">
-            <option>CollabPM App</option>
-            <option>Mobile Dashboard</option>
-            <option>API Integration</option>
-          </select>
-        </div>
+  <span class="project-icon">📁</span>
+
+  <select
+  class="project-select"
+  [(ngModel)]="selectedProjectId"
+  (ngModelChange)="onProjectChange($event)"
+>
+  @for (project of projects; track project.id) {
+    <option [ngValue]="project.id">
+      {{ project.name }}
+    </option>
+  }
+</select>
+</div>
         <div class="board-stats">
           @for (col of columns; track col.id) {
             <div class="board-stat">
@@ -31,91 +35,77 @@
         </div>
       </div>
 
-      <!-- Kanban Board -->
-      <div class="kanban-board">
-        @for (col of columns; track col.id) {
-          <div class="kanban-col">
+      @if (loading) {
+        <div class="loading-wrap">
+          <div class="spinner-lg"></div>
+          <span>Loading kanban...</span>
+        </div>
+      }
 
-            <!-- Column header -->
-            <div class="col-header">
-              <div class="col-title">
-                <span class="col-dot" [style.background]="col.color"></span>
-                <span>{{ col.label }}</span>
-                <span class="col-count">{{ col.tasks.length }}</span>
+      @if (!loading) {
+        <div class="kanban-board">
+          @for (col of columns; track col.id) {
+            <div class="kanban-col">
+              <div class="col-header">
+                <div class="col-title">
+                  <span class="col-dot" [style.background]="col.color"></span>
+                  <span>{{ col.label }}</span>
+                  <span class="col-count">{{ col.tasks.length }}</span>
+                </div>
               </div>
-              <button class="col-add-btn" title="Add task">+</button>
-            </div>
 
-            <!-- Tasks -->
-            <div class="col-tasks">
-              @for (task of col.tasks; track task.id) {
-                <div class="task-card" [class.done-card]="col.id === 'DONE'">
-
-                  <!-- Priority bar -->
-                  <div class="priority-bar" [class]="getPriorityClass(task.priority)"></div>
-
-                  <!-- Card content -->
-                  <div class="task-card-body">
-                    <div class="task-card-title" [class.done-text]="col.id === 'DONE'">
-                      {{ task.title }}
-                    </div>
-                    <div class="task-card-desc">{{ task.desc }}</div>
-
-                    <div class="task-card-footer">
-                      <div class="task-meta">
-                        <span class="prio-badge" [class]="getPriorityClass(task.priority)">
-                          {{ getPriorityLabel(task.priority) }}
-                        </span>
-                        <span class="due-date">📅 {{ task.due }}</span>
+              <div class="col-tasks">
+                @for (task of col.tasks; track task.id) {
+                  <div class="task-card" [class.done-card]="col.id === 'DONE'">
+                    <div class="priority-bar" [class]="getPriorityClass(task.priority)"></div>
+                    <div class="task-card-body">
+                      <div class="task-card-title" [class.done-text]="col.id === 'DONE'">
+                        {{ task.title }}
                       </div>
-                      <div class="task-actions">
-                        <!-- Move buttons -->
-                        @if (col.id !== 'TODO') {
-                          <button
-                            class="move-btn"
-                            title="Move left"
-                            (click)="moveTask(task, col.id, col.id === 'DONE' ? 'IN_PROGRESS' : 'TODO')">
-                            ←
-                          </button>
-                        }
-                        @if (col.id !== 'DONE') {
-                          <button
-                            class="move-btn"
-                            title="Move right"
-                            (click)="moveTask(task, col.id, col.id === 'TODO' ? 'IN_PROGRESS' : 'DONE')">
-                            →
-                          </button>
-                        }
-                        <button
-                          class="move-btn del-btn"
-                          title="Delete"
-                          (click)="deleteTask(col.id, task.id)">
-                          🗑
-                        </button>
-                      </div>
-                    </div>
+                      <div class="task-card-desc">{{ task.description }}</div>
 
-                    <!-- Assignee -->
-                    <div class="task-assignee">
-                      <div class="av" [style.background]="getAvatarColor(task.assignee)">
-                        {{ task.assignee }}
+                      <div class="task-card-footer">
+                        <div class="task-meta">
+                          <span class="prio-badge" [class]="getPriorityClass(task.priority)">
+                            {{ getPriorityLabel(task.priority) }}
+                          </span>
+                          <span class="due-date">📅 {{ task.dueDate }}</span>
+                        </div>
+                        <div class="task-actions">
+                          @if (col.id !== 'TO_DO') {
+                            <button class="move-btn" title="Move left"
+                              (click)="moveTask(task, col.id, col.id === 'DONE' ? 'IN_PROGRESS' : 'TO_DO')">
+                              ←
+                            </button>
+                          }
+                          @if (col.id !== 'DONE') {
+                            <button class="move-btn" title="Move right"
+                              (click)="moveTask(task, col.id, col.id === 'TO_DO' ? 'IN_PROGRESS' : 'DONE')">
+                              →
+                            </button>
+                          }
+                          <button class="move-btn del-btn" (click)="deleteTask(task.id)">🗑</button>
+                        </div>
                       </div>
-                      <span class="av-label">{{ task.assignee }}</span>
+
+                      <div class="task-assignee">
+                        <div class="av">
+                          {{ getAvatarInitials(task.assignedToName) }}
+                        </div>
+                        <span class="av-label">{{ task.assignedToName || 'Unassigned' }}</span>
+                      </div>
                     </div>
                   </div>
+                }
 
-                </div>
-              }
-
-              <!-- Add task placeholder -->
-              <div class="add-task-btn">
-                <span>+</span> Add task
+                @if (col.tasks.length === 0) {
+                  <div class="col-empty">No tasks</div>
+                }
               </div>
             </div>
-
-          </div>
-        }
-      </div>
+          }
+        </div>
+      }
 
     </div>
   </div>

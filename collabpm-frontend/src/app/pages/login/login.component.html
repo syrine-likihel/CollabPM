@@ -1,4 +1,5 @@
 <div class="login-page">
+
   <div class="login-left">
     <div class="brand">
       <div class="brand-logo">
@@ -27,9 +28,7 @@
         </div>
       </div>
     </div>
-    <div class="left-footer">
-      <span>ISLAI Beja · 2026–2027</span>
-    </div>
+    <div class="left-footer"><span>ISLAI Beja · 2025–2026</span></div>
   </div>
 
   <div class="login-right">
@@ -39,15 +38,10 @@
         <p>Sign in to your account to continue</p>
       </div>
 
-      @if (error) {
-        <div class="error-alert">
-          <span>⚠</span> {{ error }}
-        </div>
-      }
+      <form (ngSubmit)="onSubmit()" novalidate>
 
-      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-        <div class="form-group">
-          <label for="email">Email address</label>
+        <div class="form-group" [class.has-error]="emailInvalid">
+          <label for="email">Email address <span class="required">*</span></label>
           <div class="input-wrapper">
             <span class="input-icon">✉</span>
             <input
@@ -58,12 +52,21 @@
               placeholder="you@example.com"
               autocomplete="email"
             />
+            @if (emailInvalid) {
+              <span class="input-error-icon">⚠</span>
+            }
           </div>
+          @if (submitted && !email) {
+            <div class="field-error">Email is required</div>
+          }
+          @if (submitted && email && !isValidEmail(email)) {
+            <div class="field-error">Please enter a valid email address</div>
+          }
         </div>
 
-        <div class="form-group">
+        <div class="form-group" [class.has-error]="passwordInvalid">
           <div class="label-row">
-            <label for="password">Password</label>
+            <label for="password">Password <span class="required">*</span></label>
             <a href="#" class="forgot-link">Forgot password?</a>
           </div>
           <div class="input-wrapper">
@@ -80,20 +83,24 @@
               {{ showPassword ? '🙈' : '👁' }}
             </button>
           </div>
+          @if (passwordInvalid) {
+            <div class="field-error">Password is required</div>
+          }
         </div>
 
         <button type="submit" class="btn-login" [disabled]="loading">
           @if (!loading) { <span>Sign in →</span> }
           @if (loading) { <span class="spinner"></span> }
         </button>
+
       </form>
 
       <div class="divider"><span>or</span></div>
-
       <p class="register-link">
         Don't have an account?
         <a routerLink="/register">Create one for free</a>
       </p>
     </div>
   </div>
+
 </div>

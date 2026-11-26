@@ -1,38 +1,74 @@
 <div class="layout">
   <app-sidebar />
+
   <div class="main">
+
     <app-topbar
       [pageTitle]="isEdit ? 'Edit Task' : 'New Task'"
       [pageSubtitle]="isEdit ? 'Update task details' : 'Create a new task'"
     />
 
     <div class="content">
+
       <div class="form-container">
 
         <!-- Header -->
         <div class="form-header">
+
           <div class="form-header-left">
+
             <div class="form-icon">✅</div>
+
             <div>
-              <h2 class="form-title">{{ isEdit ? 'Edit Task' : 'Create New Task' }}</h2>
-              <p class="form-sub">{{ isEdit ? 'Update the task information below' : 'Fill in the details to create a new task' }}</p>
+              <h2 class="form-title">
+                {{ isEdit ? 'Edit Task' : 'Create New Task' }}
+              </h2>
+
+              <p class="form-sub">
+                {{
+                  isEdit
+                    ? 'Update the task information below'
+                    : 'Fill in the details to create a new task'
+                }}
+              </p>
             </div>
+
           </div>
-          <a routerLink="/tasks" class="btn-back">← Back to Tasks</a>
+
+          <a routerLink="/tasks" class="btn-back">
+            ← Back to Tasks
+          </a>
+
         </div>
 
+
+      
         @if (error) {
-          <div class="error-alert">⚠ {{ error }}</div>
+          <div class="error-alert">
+            ⚠ {{ error }}
+          </div>
         }
 
-        <form (ngSubmit)="onSubmit()" class="form-body">
 
-          <!-- Basic Info -->
+        <form
+          (ngSubmit)="onSubmit()"
+          class="form-body"
+        >
+        
           <div class="form-section">
-            <h3 class="section-title">Task Information</h3>
+
+            <h3 class="section-title">
+              Task Information
+            </h3>
+
 
             <div class="form-group">
-              <label>Task title <span class="required">*</span></label>
+
+              <label>
+                Task title
+                <span class="required">*</span>
+              </label>
+
               <input
                 type="text"
                 [(ngModel)]="form.title"
@@ -40,103 +76,266 @@
                 placeholder="e.g. Build Auth JWT module"
                 maxlength="200"
               />
-              <span class="field-hint">{{ form.title.length }}/200 characters</span>
+
+              <span class="field-hint">
+                {{ form.title.length }}/200 characters
+              </span>
+
             </div>
 
+
             <div class="form-group">
+
               <label>Description</label>
+
               <textarea
                 [(ngModel)]="form.description"
                 name="description"
                 placeholder="Describe what needs to be done..."
                 rows="4"
               ></textarea>
-            </div>
-          </div>
 
-          <!-- Details -->
+            </div>
+
+          </div>
+          
           <div class="form-section">
-            <h3 class="section-title">Details</h3>
+
+            <h3 class="section-title">
+              Details
+            </h3>
+
+
             <div class="form-grid-2">
+
+              <!-- Priority -->
               <div class="form-group">
-                <label>Priority <span class="required">*</span></label>
-                <select [(ngModel)]="form.priority" name="priority">
-                  <option value="LOW">🟢 Low</option>
-                  <option value="MEDIUM">🟡 Medium</option>
-                  <option value="HIGH">🔴 High</option>
+
+                <label>
+                  Priority
+                  <span class="required">*</span>
+                </label>
+
+                <select
+                  [(ngModel)]="form.priority"
+                  name="priority"
+                >
+                  <option value="LOW">
+                    🟢 Low
+                  </option>
+
+                  <option value="MEDIUM">
+                    🟡 Medium
+                  </option>
+
+                  <option value="HIGH">
+                    🔴 High
+                  </option>
                 </select>
+
               </div>
+
+
+              <!-- Status -->
               <div class="form-group">
-                <label>Status <span class="required">*</span></label>
-                <select [(ngModel)]="form.status" name="status">
-                  <option value="TODO">To do</option>
-                  <option value="IN_PROGRESS">In progress</option>
-                  <option value="DONE">Done</option>
+
+                <label>
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select
+                  [(ngModel)]="form.status"
+                  name="status"
+                >
+                  <option value="TO_DO">
+                    To do
+                  </option>
+
+                  <option value="IN_PROGRESS">
+                    In progress
+                  </option>
+
+                  <option value="DONE">
+                    Done
+                  </option>
                 </select>
+
               </div>
+
+
+              <!-- Due Date -->
               <div class="form-group">
-                <label>Due date <span class="required">*</span></label>
+
+                <label>
+                  Due date
+                  <span class="required">*</span>
+                </label>
+
                 <input
                   type="date"
                   [(ngModel)]="form.dueDate"
                   name="dueDate"
                 />
+
               </div>
+        
               <div class="form-group">
-                <label>Project <span class="required">*</span></label>
-                <select [(ngModel)]="form.projectId" name="projectId">
-                  <option value="">Select a project...</option>
+
+                <label>
+                  Project
+                  <span class="required">*</span>
+                </label>
+
+                <select
+                  [(ngModel)]="form.projectId"
+                  name="projectId"
+                  (ngModelChange)="onProjectChange()"
+                >
+
+                  <option value="">
+                    Select a project...
+                  </option>
+
                   @for (project of projects; track project.id) {
-                    <option [value]="project.id">{{ project.name }}</option>
+
+                    <option [value]="project.id">
+                      {{ project.name }}
+                    </option>
+
                   }
+
                 </select>
+
               </div>
+
             </div>
+
           </div>
 
-          <!-- Assignment -->
           <div class="form-section">
-            <h3 class="section-title">Assignment</h3>
-            <div class="form-group" style="max-width: 320px">
-              <label>Assign to</label>
-              <select [(ngModel)]="form.assignedToId" name="assignedToId">
-                <option value="">Unassigned</option>
+
+            <h3 class="section-title">
+              Assignment
+            </h3>
+
+
+            <div
+              class="form-group"
+              style="max-width: 320px"
+            >
+
+              <label>
+                Assign to
+              </label>
+
+
+              <select
+                [(ngModel)]="form.assignedToId"
+                name="assignedToId"
+              >
+
+                <option value="">
+                  Unassigned
+                </option>
+
+
                 @for (member of members; track member.id) {
-                  <option [value]="member.id">{{ member.name }}</option>
+
+                  <option [value]="member.userId">
+
+                    {{ member.userName }}
+
+                    @if (member.userEmail) {
+                      — {{ member.userEmail }}
+                    }
+
+                  </option>
+
                 }
+
               </select>
+
             </div>
 
-            <!-- Member preview -->
             @if (form.assignedToId) {
-              <div class="assignee-preview">
-                @for (member of members; track member.id) {
-                  @if (member.id.toString() === form.assignedToId) {
-                    <div class="assignee-av">{{ member.avatar }}</div>
-                    <span class="assignee-name">{{ member.name }}</span>
-                  }
-                }
-              </div>
-            }
-          </div>
 
-          <!-- Actions -->
+              @for (member of members; track member.id) {
+
+                @if (member.userId?.toString() === form.assignedToId) {
+
+                  <div class="assignee-preview">
+
+                    <div class="assignee-av">
+
+                      {{
+                        member.userName
+                          ? member.userName.charAt(0).toUpperCase()
+                          : 'U'
+                      }}
+
+                    </div>
+
+                    <span class="assignee-name">
+                      {{ member.userName }}
+                    </span>
+
+                  </div>
+
+                }
+
+              }
+
+            }
+
+          </div>
+         
           <div class="form-actions">
-            <button type="button" class="btn-cancel" (click)="onCancel()">
+
+            <button
+              type="button"
+              class="btn-cancel"
+              (click)="onCancel()"
+            >
               Cancel
             </button>
-            <button type="submit" class="btn-submit" [disabled]="loading">
+
+
+            <button
+              type="submit"
+              class="btn-submit"
+              [disabled]="loading"
+            >
+
               @if (!loading) {
-                <span>{{ isEdit ? '💾 Save changes' : '✨ Create task' }}</span>
+
+                <span>
+                  {{
+                    isEdit
+                      ? '💾 Save changes'
+                      : '✨ Create task'
+                  }}
+                </span>
+
               }
+
+
               @if (loading) {
+
                 <span class="spinner"></span>
+
               }
+
             </button>
+
           </div>
 
         </form>
+
       </div>
+
     </div>
+
   </div>
+
 </div>
